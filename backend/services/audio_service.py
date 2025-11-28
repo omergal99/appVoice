@@ -1,51 +1,56 @@
 """Speech-to-Text service using OpenAI Whisper"""
-# from emergentintegrations.llm.openai import OpenAISpeechToText
 import os
 import logging
 from io import BytesIO
+from typing import Dict, Any
+from openai import OpenAI
 
 logger = logging.getLogger(__name__)
-
 
 class AudioService:
     """Handles audio transcription using Whisper"""
     
     def __init__(self):
-        api_key = os.getenv("EMERGENT_LLM_KEY")
-        if not api_key:
-            raise ValueError("EMERGENT_LLM_KEY not found in environment")
-        self.stt = OpenAISpeechToText(api_key=api_key)
+        self.api_key = os.getenv("EMERGENT_LLM_KEY") or os.getenv("OPENAI_API_KEY")
+        self.client = None
+        if self.api_key:
+            self.client = OpenAI(api_key=self.api_key)
+            logger.info("AudioService: OpenAI Whisper client initialized")
+        else:
+            logger.warning("AudioService: No API key - using mock mode")
     
     async def transcribe_audio(self, audio_data: bytes, language: str = None) -> dict:
-        """
-        Transcribe audio to text
+        """Transcribe audio to text"""
+        if not self.client:
+            # MOCK MODE - Demo responses
+            logger.info("AudioService MOCK: Transcribing...")
+            mock_texts = {
+                "en": "What is Docker? Demo transcription.",
+                "he": "[translate:מה זה Docker? תמלול לדוגמה.]",
+                None: "Explain REST API."
+            }
+            return {
+                "text": mock_texts.get(language, mock_texts["en"]),
+                "language": language or "auto"
+            }
         
-        Args:
-            audio_data: Audio file bytes
-            language: Optional language code ('en', 'he', etc.)
-        
-        Returns:
-            dict with 'text' and optional 'language'
-        """
+        # REAL OpenAI Whisper
         try:
             audio_file = BytesIO(audio_data)
-            audio_file.name = "audio.webm"  # Whisper needs a filename
+            audio_file.name = "audio.webm"
             
-            # Transcribe with Whisper
-            response = await self.stt.transcribe(
+            response = await self.client.audio.transcriptions.create(
                 file=audio_file,
                 model="whisper-1",
                 response_format="json",
-                language=language  # None for auto-detection
+                language=language
             )
             
-            logger.info(f"Transcription successful: {response.text[:50]}...")
-            
+            logger.info(f"Whisper transcription: {response.text[:50]}...")
             return {
                 "text": response.text,
-                "language": language or "auto"
+                "language": getattr(response, 'language', language or "auto")
             }
-            
         except Exception as e:
-            logger.error(f"Transcription failed: {str(e)}")
-            raise Exception(f"Failed to transcribe audio: {str(e)}")
+            logger.error(f"Whisper failed: {str(e)}")
+            raise Exception(f"Transcription failed: {str(e)}")

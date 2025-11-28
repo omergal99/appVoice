@@ -1,64 +1,51 @@
-"""AI processing service using GPT-5.1"""
-# from emergentintegrations.llm.chat import LlmChat, UserMessage
+"""AI processing service using GPT"""
 import os
 import logging
+from openai import OpenAI
 
 logger = logging.getLogger(__name__)
 
-
 class AIService:
-    """Handles intelligent query processing with GPT-5.1"""
+    """Handles intelligent query processing"""
     
     def __init__(self):
-        api_key = os.getenv("EMERGENT_LLM_KEY")
-        if not api_key:
-            raise ValueError("EMERGENT_LLM_KEY not found in environment")
-        self.api_key = api_key
+        self.api_key = os.getenv("EMERGENT_LLM_KEY") or os.getenv("OPENAI_API_KEY")
+        self.client = None
+        if self.api_key:
+            self.client = OpenAI(api_key=self.api_key)
+            logger.info("AIService: OpenAI GPT client initialized")
+        else:
+            logger.warning("AIService: No API key - using mock mode")
     
     async def process_query(self, query: str, session_id: str, language: str = "en") -> str:
-        """
-        Process user query and generate intelligent response
+        """Process user query"""
+        if not self.client:
+            # MOCK MODE
+            logger.info(f"AI MOCK: {query[:30]}...")
+            mock_responses = {
+                "en": "Docker containers package apps with dependencies. Microservices = independent services via API.",
+                "he": "[translate:קונטיינרים של Docker מארזים אפליקציות עם תלויות. מיקרו-שירותים = שירותים עצמאיים דרך API. ]"
+            }
+            return mock_responses.get(language, mock_responses["en"])
         
-        Args:
-            query: User's question or statement
-            session_id: Unique session identifier
-            language: Language code ('en', 'he', etc.)
-        
-        Returns:
-            AI-generated response text
-        """
+        # REAL OpenAI GPT
         try:
-            # Create system message based on language
-            if language == "he":
-                system_message = (
-                    "אתה עוזר קולי חכם בשם SmartSpeak. "
-                    "אתה מתמחה במענה על שאלות טכנולוגיות, תכנות, ארכיטקטורה, אבטחת מידע, ו-Cloud. "
-                    "תן תשובות ממוקדות, מקצועיות, וברורות. "
-                    "אם השאלה לא טכנולוגית, תן תשובה עוזרת וידידותית."
-                )
-            else:
-                system_message = (
-                    "You are SmartSpeak, an intelligent voice assistant. "
-                    "You specialize in answering questions about technology, programming, architecture, cybersecurity, and Cloud. "
-                    "Provide focused, professional, and clear answers. "
-                    "If the question is not technical, give a helpful and friendly response."
-                )
+            system_message = (
+                "You are SmartSpeak, a technical voice assistant expert in programming, architecture, cloud, and cybersecurity."
+                if language == "en" else
+                "[translate:אתה SmartSpeak, עוזר קולי מומחה בתכנות, ארכיטקטורה, ענן ואבטחת מידע.]"
+            )
             
-            # Initialize chat with GPT-5.1
-            chat = LlmChat(
-                api_key=self.api_key,
-                session_id=session_id,
-                system_message=system_message
-            ).with_model("openai", "gpt-5.1")
+            response = await self.client.chat.completions.create(
+                model="gpt-4o-mini",  # or gpt-5.1 later
+                messages=[
+                    {"role": "system", "content": system_message},
+                    {"role": "user", "content": query}
+                ],
+                max_tokens=300
+            )
             
-            # Send user message
-            user_message = UserMessage(text=query)
-            response = await chat.send_message(user_message)
-            
-            logger.info(f"AI response generated for session {session_id}")
-            
-            return response
-            
+            return response.choices[0].message.content
         except Exception as e:
-            logger.error(f"AI processing failed: {str(e)}")
-            raise Exception(f"Failed to process query: {str(e)}")
+            logger.error(f"GPT failed: {str(e)}")
+            raise Exception(f"AI processing failed: {str(e)}")
