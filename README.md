@@ -23,7 +23,7 @@ yarn install
 ```bash
 cd backend
 if needed (. .venv/bin/activate) (.\venv\Scripts\activate)
-uvicorn server:app --host 0.0.0.0 --port 8001 --reload
+uvicorn server:app --host 0.0.0.0 --port 8002 --reload
 ```
 
 #### Frontend

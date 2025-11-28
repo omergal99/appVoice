@@ -258,7 +258,7 @@ User Hears Response
 
 ### Current Setup
 - Kubernetes container environment
-- Backend: FastAPI on port 8001
+- Backend: FastAPI on port 8002
 - Frontend: React on port 3000
 - MongoDB: Local instance
 - Supervisor for process management
