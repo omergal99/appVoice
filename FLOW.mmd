@@ -1,0 +1,28 @@
+flowchart TD
+    U[משתמש] -->|קלט קול| VA[Voice Assistant App]
+
+    VA --> STT[Speech-to-Text: Whisper]
+    STT --> NLP[NLP / Intent Recognition: GPT-5.1]
+    NLP --> TTS[Text-to-Speech: OpenAI TTS]
+
+    VA --> Vault[HashiCorp Vault]
+    Vault --> VA
+
+    VA --> OpenAI[OpenAI APIs]
+    VA --> WeatherAPI[Weather API]
+
+    TTS -->|תשובה קולית| U
+
+    %% הגדרת צבעים
+    classDef user fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef app fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef ai fill:#bfb,stroke:#333,stroke-width:2px;
+    classDef infra fill:#ffb,stroke:#333,stroke-width:2px;
+    classDef external fill:#f99,stroke:#333,stroke-width:2px;
+
+    %% שיוך צבעים לצמתים
+    class U user;
+    class VA app;
+    class STT,NLP,TTS ai;
+    class Vault infra;
+    class OpenAI,WeatherAPI external;

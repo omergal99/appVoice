@@ -1,0 +1,49 @@
+{
+  "total_tests": 6,
+  "passed_tests": 6,
+  "success_rate": 100.0,
+  "test_details": [
+    {
+      "test_name": "API Health Check",
+      "success": true,
+      "details": "Status: 200, Message: SmartSpeak Voice Assistant API",
+      "error": "",
+      "timestamp": "2025-11-28T20:06:22.931202"
+    },
+    {
+      "test_name": "Voice Transcribe Endpoint",
+      "success": true,
+      "details": "Status: 200, Transcribed text length: 3",
+      "error": "",
+      "timestamp": "2025-11-28T20:06:23.691520"
+    },
+    {
+      "test_name": "Voice Process Endpoint",
+      "success": true,
+      "details": "Status: 200, Response length: 1045",
+      "error": "",
+      "timestamp": "2025-11-28T20:06:27.776901"
+    },
+    {
+      "test_name": "Voice Speak Endpoint",
+      "success": true,
+      "details": "Status: 200, Audio data length: 47360",
+      "error": "",
+      "timestamp": "2025-11-28T20:06:30.495771"
+    },
+    {
+      "test_name": "Voice History Endpoint",
+      "success": true,
+      "details": "Status: 200, Messages count: 0",
+      "error": "",
+      "timestamp": "2025-11-28T20:06:30.561887"
+    },
+    {
+      "test_name": "Voice Ask Endpoint (Full Flow)",
+      "success": true,
+      "details": "Status: 200, Text length: 421, Audio length: 657920",
+      "error": "",
+      "timestamp": "2025-11-28T20:06:37.505791"
+    }
+  ]
+}
