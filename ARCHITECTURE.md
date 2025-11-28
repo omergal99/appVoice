@@ -42,7 +42,7 @@ SmartSpeak is a voice-powered AI assistant built with a modern, modular architec
 │  └────────────┴─────────────────────────┴─────────────────┘ │
 └─────────────────────────────────────────────────────────────┘
                             │
-                            │ API_PROVIDERintegrations
+                            │ emergentintegrations
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                    External AI Services                      │
@@ -174,7 +174,7 @@ User Speaks
 [4] AudioService.transcribe_audio()
     │
     ▼
-[5] Whisper API (API_PROVIDERintegrations)
+[5] Whisper API (emergentintegrations)
     │
     ▼
 [6] Text Returned to Frontend
@@ -186,7 +186,7 @@ User Speaks
 [8] AIService.process_query()
     │
     ▼
-[9] GPT-5.1 API (API_PROVIDERintegrations)
+[9] GPT-5.1 API (emergentintegrations)
     │
     ▼
 [10] AI Response Returned
@@ -198,7 +198,7 @@ User Speaks
 [12] TTSService.text_to_speech()
     │
     ▼
-[13] OpenAI TTS API (API_PROVIDERintegrations)
+[13] OpenAI TTS API (emergentintegrations)
     │
     ▼
 [14] Base64 Audio Returned
@@ -287,7 +287,7 @@ User Hears Response
 - Excellent for interactive UIs
 - Good TypeScript support
 
-### AI Integration: API_PROVIDERintegrations
+### AI Integration: emergentintegrations
 **Why?**
 - Unified interface for multiple AI providers
 - Built-in error handling

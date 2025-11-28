@@ -1,5 +1,5 @@
 """Text-to-Speech service using OpenAI TTS"""
-from emergentintegrations.llm.openai import OpenAITextToSpeech
+# from emergentintegrations.llm.openai import OpenAITextToSpeech
 import os
 import logging
 import base64

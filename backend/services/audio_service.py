@@ -1,5 +1,5 @@
 """Speech-to-Text service using OpenAI Whisper"""
-from emergentintegrations.llm.openai import OpenAISpeechToText
+# from emergentintegrations.llm.openai import OpenAISpeechToText
 import os
 import logging
 from io import BytesIO

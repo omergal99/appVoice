@@ -1,5 +1,5 @@
 """AI processing service using GPT-5.1"""
-from emergentintegrations.llm.chat import LlmChat, UserMessage
+# from emergentintegrations.llm.chat import LlmChat, UserMessage
 import os
 import logging
 
